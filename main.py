@@ -49,9 +49,7 @@ class KMeansPP(Clustering):
         first_centroid_index = np.random.choice(X.shape[0], 1)
         self.centroids = X[first_centroid_index, :]
         for _ in range(self.k - 1):
-            distances = np.array([])
-            for x in X:
-                distances = np.append(distances, self.distance(x))
+            distances = np.array([self.distance(x) for x in X])
             probabilities = distances**2 / np.sum(distances**2)
             new_centroid_index = np.random.choice(X.shape[0], 1, p=probabilities)
             self.centroids = np.append(self.centroids, X[new_centroid_index, :], axis=0)
