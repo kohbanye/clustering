@@ -1,15 +1,22 @@
+from abc import ABCMeta, abstractmethod
 import numpy as np
 
 
-class KMeans:
+class Clustering(metaclass=ABCMeta):
     k: int
     d: int
     centroids: np.ndarray
     clusters: np.ndarray
 
-    def __init__(self, k=3):
+    def __init__(self, k: int):
         self.k = k
 
+    @abstractmethod
+    def fit(self, X: np.ndarray):
+        pass
+
+
+class KMeans(Clustering):
     def fit(self, X: np.ndarray):
         self.d = X.shape[1]
         initial_centroids_index = np.random.choice(X.shape[0], self.k, replace=False)
@@ -34,7 +41,7 @@ class KMeans:
 if __name__ == "__main__":
     X = np.random.rand(100, 2)
 
-    kmeans = KMeans(k=3)
+    kmeans = KMeans(3)
     kmeans.fit(X)
 
     print(X)
