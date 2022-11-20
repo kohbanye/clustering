@@ -43,7 +43,9 @@ class KMeans(Clustering):
 
             self.clusters = new_clusters
             for i in range(self.k):
-                self.centroids[i] = np.mean(X[self.clusters == i], axis=0)
+                cluster = X[self.clusters == i, :]
+                if cluster.shape[0] > 0:
+                    self.centroids[i] = np.mean(cluster, axis=0)
 
 
 class KMeansPP(Clustering):
@@ -82,7 +84,9 @@ class KMeansPP(Clustering):
 
             self.clusters = new_clusters
             for i in range(self.k):
-                self.centroids[i] = np.mean(X[self.clusters == i], axis=0)
+                cluster = X[self.clusters == i, :]
+                if cluster.shape[0] > 0:
+                    self.centroids[i] = np.mean(cluster, axis=0)
 
 
 if __name__ == "__main__":
