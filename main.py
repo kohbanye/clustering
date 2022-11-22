@@ -34,7 +34,7 @@ class KMeans(Clustering):
             for i, x in enumerate(X):
                 distances = np.linalg.norm(x - self.centroids, axis=1)
                 new_clusters[i] = np.argmin(distances)
-                potential += float(np.argmin(distances))
+                potential += np.min(distances)
 
             self.potential = np.append(self.potential, potential)
 
@@ -75,7 +75,7 @@ class KMeansPP(Clustering):
             for i, x in enumerate(X):
                 distances = np.linalg.norm(x - self.centroids, axis=1)
                 new_clusters[i] = np.argmin(distances)
-                potential += float(np.argmin(distances))
+                potential += np.min(distances)
 
             self.potential = np.append(self.potential, potential)
 
