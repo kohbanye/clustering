@@ -91,41 +91,28 @@ class KMeansPP(Clustering):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    from dataset import get_data
 
-    generator = np.random.default_rng(0)
-    X = np.concatenate(
-        [
-            generator.normal(loc=(0, 0), scale=0.8, size=(100, 2)),
-            generator.normal(loc=(4, 2), scale=0.8, size=(100, 2)),
-            generator.normal(loc=(2, 5), scale=0.8, size=(100, 2)),
-            generator.normal(loc=(5, 7), scale=0.8, size=(100, 2)),
-            generator.normal(loc=(7, 4), scale=0.8, size=(100, 2)),
-        ]
-    )
+    X = get_data("wineqr")
 
-    kmeans = KMeans(5)
-    kmeans_pp = KMeansPP(5)
+    # k is determined by the elbow method
+    k = 10
+
+    kmeans = KMeans(k)
+    kmeans_pp = KMeansPP(k)
     kmeans.fit(X)
     kmeans_pp.fit(X)
 
-    fig, ax = plt.subplots(2, 2, figsize=(10, 5))
-    ax[0][0].scatter(X[:, 0], X[:, 1], c=kmeans.clusters)
-    ax[0][0].scatter(kmeans.centroids[:, 0], kmeans.centroids[:, 1], c="red")
-    ax[0][0].scatter(
-        kmeans.first_centroids[:, 0], kmeans.first_centroids[:, 1], c="black"
-    )
-    ax[0][0].set_title("KMeans")
-    ax[0][1].scatter(X[:, 0], X[:, 1], c=kmeans_pp.clusters)
-    ax[0][1].scatter(kmeans_pp.centroids[:, 0], kmeans_pp.centroids[:, 1], c="red")
-    ax[0][1].scatter(
-        kmeans_pp.first_centroids[:, 0], kmeans_pp.first_centroids[:, 1], c="black"
-    )
-    ax[0][1].set_title("KMeans++")
-    ax[1][0].plot(kmeans.potential)
-    ax[1][1].plot(kmeans_pp.potential)
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    ax[0].plot(np.arange(1, kmeans.potential.shape[0] + 1), kmeans.potential)
+    ax[0].set_title("potential of k-means")
+    ax[1].plot(np.arange(1, kmeans_pp.potential.shape[0] + 1), kmeans_pp.potential)
+    ax[1].set_title("potential of k-means++")
     plt.show()
 
-    print(kmeans.centroids)
-    print(kmeans_pp.centroids)
-    print(kmeans.potential)
-    print(kmeans_pp.potential)
+    print("Initial potential")
+    print("\tk-means:", kmeans.potential[0])
+    print("\tk-means++:", kmeans_pp.potential[0])
+    print("Final potential")
+    print("\tk-means:", kmeans.potential[-1])
+    print("\tk-means++:", kmeans_pp.potential[-1])
